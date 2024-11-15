@@ -1,0 +1,6 @@
+﻿{
+  "DriverType": "chrome",
+  "Application_Url": "http://www.eaapp.somee.com",
+  "Headless": false,
+  "SlowMo": 500
+}
