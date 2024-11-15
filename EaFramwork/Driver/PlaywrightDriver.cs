@@ -37,7 +37,6 @@ public class PlaywrightDriver : IDisposable, IPlaywrightDriver
             DriverType.Firefox => await _playwrightDriverInitializer.GetFirefoxDriverAsync(_testSettings),
             DriverType.WebKit => await _playwrightDriverInitializer.GetWebKitDriverAsync(_testSettings),
             _ => await _playwrightDriverInitializer.GetChromiumDriverAsync(_testSettings),
-
         };
     }
     private BrowserNewContextOptions CreateContextOptions(ViewportSize? viewport = null)
