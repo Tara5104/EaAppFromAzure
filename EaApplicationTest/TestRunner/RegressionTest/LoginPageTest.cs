@@ -12,37 +12,38 @@ public class LoginPageTest
     LoginPage loginPage;
     EmployeePage employeePage;
     Employee emp;
-    private PlaywrightDriver _driver;  
-    private TestSettings _testSettings;
+    private readonly IPlaywrightDriver _playwrightDriver;
+    private readonly IEmployeePage _employeePage;
+    private readonly ILoginPage _loginPage;
+    private readonly TestSettings _testSettings;
 
-    public LoginPageTest(IPlaywrightDriverInitializer playwrightDriverInitializer)
+    public LoginPageTest(IPlaywrightDriver playwrightDriver,TestSettings testSettings,IEmployeePage employeePage,ILoginPage loginPage)
     {
-        _testSettings = ConfigReader.ReadConfig();        
-        _driver = new PlaywrightDriver(_testSettings, playwrightDriverInitializer);
-    }
+        _playwrightDriver = playwrightDriver;   
+        _testSettings = testSettings;
+        _employeePage = employeePage;
+        _loginPage = loginPage;
+
+     }
 
     [Fact]
     public async Task LoginTest()
     {
-        var page = await _driver.Page;
-        await page.GotoAsync(_Url);
+        var page = await _playwrightDriver.Page;
+        await page.GotoAsync(_testSettings.Application_Url);
+       
+        await _loginPage.ClickLogin();
+        await _loginPage.Login("admin", "password");
 
-        loginPage = new LoginPage(page);
-
-        await loginPage.ClickLogin();
-        await loginPage.Login("admin", "password");
-
-        var isExist = await loginPage.IsEmployeeDetailsExists();
+        var isExist = await _loginPage.IsEmployeeDetailsExists();
         Assert.True(isExist, "Employee details section was not visible.");  
 
     }
-    //[Fact]
+    [Fact]
     public async Task CreatNewEmployeeTest()
     {
-        var page = await _driver.Page;
-        await page.GotoAsync(_Url);
-
-        loginPage = new LoginPage(page);
+        var page = await _playwrightDriver.Page;
+        await page.GotoAsync(_Url);       
     
        await page.Context.Tracing.StartAsync(new ()
         {
@@ -51,25 +52,25 @@ public class LoginPageTest
             Sources = true
         });
 
-        await loginPage.ClickLogin();
-        await loginPage.Login("admin", "password");
+        await _loginPage.ClickLogin();
+        await _loginPage.Login("admin", "password");
 
         var isExist = await loginPage.IsEmployeeDetailsExists();
         Assert.True(isExist, "Employee details section was not visible."); 
 
-        employeePage = new EmployeePage(page);
+        
         var emp = new Employee 
         {
-            Name = "Hina",
+            Name = "Maya",
             Salary= 20000,
             DurationWorked =2,
             Grade = Grade.CLevel,
-            Email ="hina@html.com"
+            Email ="Maya@html.com"
         };
 
-        await employeePage.ClickEmployeeList();
-        await employeePage.ClickCreateNew();
-        await employeePage.CreateNewEmployee(emp);
+        await _employeePage.ClickEmployeeList();
+        await _employeePage.ClickCreateNew();
+        await _employeePage.CreateNewEmployee(emp);
         await employeePage.ClickCreate();
 
         var locator = employeePage.IsEmployeeCreateAsync(emp.Name);
