@@ -1,11 +1,12 @@
-﻿using Microsoft.Playwright;
+﻿using EaFramwork.Driver;
+using Microsoft.Playwright;
 
 namespace EaFramwork.Pages;
 
-public class LoginPage
+public class LoginPage : ILoginPage
 {
     private IPage _page;
-    public LoginPage(IPage page) => _page = page;
+    public LoginPage(IPlaywrightDriver playwrightDriver) => _page = playwrightDriver.Page.Result;
 
     private ILocator LoginLink => _page.Locator("text=Login");
     private ILocator TxtUserName => _page.Locator("#UserName");

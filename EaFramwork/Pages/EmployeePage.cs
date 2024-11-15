@@ -1,12 +1,13 @@
-﻿using EaFramwork.Model;
+﻿using EaFramwork.Driver;
+using EaFramwork.Model;
 using Microsoft.Playwright;
 
 namespace EaFramwork.Pages;
 
-public class EmployeePage
+public class EmployeePage : IEmployeePage
 {
     private IPage _page;
-    public EmployeePage(IPage page) => _page = page;
+    public EmployeePage(IPlaywrightDriver playwrightDriver) => _page = playwrightDriver.Page.Result;
 
     private ILocator LnkEmployeeList => _page.Locator("text='Employee List'");
     private ILocator LnkCreateNew => _page.Locator("text='Create New'");
@@ -30,7 +31,7 @@ public class EmployeePage
     public async Task ClickCreate() => await BtnCreate.ClickAsync();
     public ILocator IsEmployeeCreateAsync(string name)
     {
-     return  _page.GetByRole(AriaRole.Cell, new() {Name = name, Exact =true });
+        return _page.GetByRole(AriaRole.Cell, new() { Name = name, Exact = true });
     }
 
 }
