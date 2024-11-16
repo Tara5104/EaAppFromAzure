@@ -1,5 +1,4 @@
-﻿using EaFramwork.Config;
-using EaFramwork.Driver;
+﻿using EaApplicationTest.Fixure;
 using EaFramwork.Model;
 using EaFramwork.Pages;
 using Microsoft.Playwright;
@@ -12,68 +11,56 @@ public class LoginPageTest
     LoginPage loginPage;
     EmployeePage employeePage;
     Employee emp;
-    private readonly IPlaywrightDriver _playwrightDriver;
+    private readonly ITestFixtureBase _testFixture;
     private readonly IEmployeePage _employeePage;
     private readonly ILoginPage _loginPage;
-    private readonly TestSettings _testSettings;
 
-    public LoginPageTest(IPlaywrightDriver playwrightDriver,TestSettings testSettings,IEmployeePage employeePage,ILoginPage loginPage)
+    public LoginPageTest(ITestFixtureBase testFixtureBase, IEmployeePage employeePage, ILoginPage loginPage)
     {
-        _playwrightDriver = playwrightDriver;   
-        _testSettings = testSettings;
+        _testFixture = testFixtureBase;
         _employeePage = employeePage;
         _loginPage = loginPage;
-
-     }
+    }
 
     [Fact]
     public async Task LoginTest()
     {
-        var page = await _playwrightDriver.Page;
-        await page.GotoAsync(_testSettings.Application_Url);
-       
+        await _testFixture.NavigateToURl();
+
         await _loginPage.ClickLogin();
         await _loginPage.Login("admin", "password");
 
         var isExist = await _loginPage.IsEmployeeDetailsExists();
-        Assert.True(isExist, "Employee details section was not visible.");  
+        Assert.True(isExist, "Employee details section was not visible.");
 
     }
     [Fact]
     public async Task CreatNewEmployeeTest()
     {
-        var page = await _playwrightDriver.Page;
-        await page.GotoAsync(_Url);       
-    
-       await page.Context.Tracing.StartAsync(new ()
-        {
-            Screenshots = true,
-            Snapshots = true,
-            Sources = true
-        });
+        await _testFixture.NavigateToURl();
 
         await _loginPage.ClickLogin();
         await _loginPage.Login("admin", "password");
 
-        var isExist = await loginPage.IsEmployeeDetailsExists();
-        Assert.True(isExist, "Employee details section was not visible."); 
+        var isExist = await _loginPage.IsEmployeeDetailsExists();
+        Assert.True(isExist, "Employee details section was not visible.");
 
-        
-        var emp = new Employee 
+
+        var emp = new Employee
         {
-            Name = "Maya",
-            Salary= 20000,
-            DurationWorked =2,
+            Name = "radha",
+            Salary = 20000,
+            DurationWorked = 2,
             Grade = Grade.CLevel,
-            Email ="Maya@html.com"
+            Email = "radha@html.com"
         };
 
         await _employeePage.ClickEmployeeList();
         await _employeePage.ClickCreateNew();
         await _employeePage.CreateNewEmployee(emp);
-        await employeePage.ClickCreate();
+        await _employeePage.ClickCreate();
 
-        var locator = employeePage.IsEmployeeCreateAsync(emp.Name);
+        var locator = _employeePage.IsEmployeeCreateAsync(emp.Name);
         int empCount = await locator.CountAsync();
 
         System.Diagnostics.Debug.WriteLine($"Total Employees with name {emp.Name}: {empCount}");
@@ -88,17 +75,12 @@ public class LoginPageTest
             for (int i = 0; i < empCount; i++)
             {
                 string employeeName = await locator.Nth(i).TextContentAsync();
-                Assert.True(empCount > 1,$"No employees with the name '{emp.Name}' were found.");
+                Assert.True(empCount > 1, $"No employees with the name '{emp.Name}' were found.");
                 System.Diagnostics.Debug.WriteLine($"Employee {i + 1}: {employeeName}");
-            }          
+            }
         }
-        // Your test code here
-
-        await page.Context.Tracing.StopAsync(new()
-        {
-            Path = @"C:\Users\pares\source\repos\EaApplicationTest\EaApplicationTest\bin\Debug\net8.0\trace.zip" // This generates a trace file you can open in Playwright Trace Viewer
-        });
-        // await Assertions.Expect(locator).ToBeVisibleAsync();
     }
+
+       
 
 }

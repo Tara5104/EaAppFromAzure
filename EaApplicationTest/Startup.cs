@@ -1,4 +1,5 @@
-﻿using EaFramwork.Config;
+﻿using EaApplicationTest.Fixure;
+using EaFramwork.Config;
 using EaFramwork.Driver;
 using EaFramwork.Pages;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +15,7 @@ public class Startup
             .AddScoped<IPlaywrightDriver, PlaywrightDriver>()
             .AddScoped<IPlaywrightDriverInitializer, PlaywrightDriverInitializer>()
             .AddScoped<IEmployeePage, EmployeePage>()
-            .AddScoped<ILoginPage, LoginPage>();
-
-
-
+            .AddScoped<ILoginPage, LoginPage>()            
+            .AddScoped<ITestFixtureBase, TestFixtureBase>();
     }
 }
