@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EaApplicationTest", "EaApplicationTest\EaApplicationTest.csproj", "{A5CAD9CF-E7EF-467E-8178-C0B0F8016B63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EaApplicationTest", "EaApplicationTest\EaApplicationTest.csproj", "{A5CAD9CF-E7EF-467E-8178-C0B0F8016B63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EaFramwork", "EaFramwork\EaFramwork.csproj", "{05DEAD7A-C883-412D-A966-C0DD1B7DA317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EaFramwork", "EaFramwork\EaFramwork.csproj", "{05DEAD7A-C883-412D-A966-C0DD1B7DA317}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
